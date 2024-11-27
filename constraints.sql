@@ -65,4 +65,21 @@ ALTER TABLE teaching
 ALTER TABLE teacher 
     ADD CONSTRAINT CK_academic_degree CHECK (degree IN ('CN', 'KS', 'Ths', 'TS', 'PTS'));
 
--- 
+-- Học viên ít nhất là 18 tuổi
+ALTER TABLE student ADD CONSTRAINT CK_student_age 
+CHECK (YEAR(CURRENT_DATE()) - YEAR(birth_date) >= 18);
+
+-- Giảng dạy một môn học ngày bắt đầu (start_date) phải nhỏ hơn ngày kết thúc (end_date)
+ALTER TABLE teaching ADD CONSTRAINT CK_teaching_dates 
+CHECK (start_date < end_date);
+
+-- Giáo viên khi vào làm ít nhất là 22 tuổi
+ALTER TABLE teacher ADD CONSTRAINT CK_teacher_age 
+CHECK (YEAR(start_date) - YEAR(birth_date) >= 22);
+
+-- Tất cả các môn học đều có số tín chỉ lý thuyết và tín chỉ thực hành chênh lệch nhau không quá 3
+ALTER TABLE subject ADD CONSTRAINT CK_credit_diff 
+CHECK (ABS(credits_theory - credits_practical) <= 3);
+
+
+
