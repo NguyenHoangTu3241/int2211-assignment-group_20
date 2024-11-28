@@ -1,6 +1,6 @@
 USE academic_administration;
 
--- Add Foreign Keys
+-- Thêm các khóa ngoại
 
 ALTER TABLE class 
     ADD CONSTRAINT FK_class_leader FOREIGN KEY (class_leader_id) REFERENCES student(student_id),
@@ -30,7 +30,7 @@ ALTER TABLE exam_results
     ADD CONSTRAINT FK_subject_exam FOREIGN KEY (subject_id) REFERENCES subject(subject_id);
 
 
--- Add other constraints
+-- Thêm các ràng buộc khác
 
 -- Mã học viên có định dạng 5 ký tự: 3 ký tự đầu là mã lớp, 2 ký tự cuối là số
 ALTER TABLE student 
@@ -67,7 +67,7 @@ ALTER TABLE teacher
 
 -- Học viên ít nhất là 18 tuổi
 ALTER TABLE student ADD CONSTRAINT CK_student_age 
-CHECK (YEAR(CURRENT_DATE()) - YEAR(birth_date) >= 18);
+CHECK (2024 - YEAR(birth_date) >= 18);
 
 -- Giảng dạy một môn học ngày bắt đầu (start_date) phải nhỏ hơn ngày kết thúc (end_date)
 ALTER TABLE teaching ADD CONSTRAINT CK_teaching_dates 
@@ -79,7 +79,7 @@ CHECK (YEAR(start_date) - YEAR(birth_date) >= 22);
 
 -- Tất cả các môn học đều có số tín chỉ lý thuyết và tín chỉ thực hành chênh lệch nhau không quá 3
 ALTER TABLE subject ADD CONSTRAINT CK_credit_diff 
-CHECK (ABS(credits_theory - credits_practical) <= 3);
+CHECK (ABS(theory_credit - practical_credit) <= 3);
 
 
 
