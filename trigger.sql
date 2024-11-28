@@ -374,7 +374,7 @@ BEGIN
               SELECT subject_id 
               FROM teaching 
               WHERE class_id = NEW.class_id 
-                AND end_date > NEW.start_date
+                AND end_date >= NEW.start_date
           )
     ) THEN
         SIGNAL SQLSTATE '45000' 
