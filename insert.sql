@@ -2,6 +2,7 @@ USE academic_administration;
 
 -- Disable foreign key checks
 SET FOREIGN_KEY_CHECKS = 0;
+SET SQL_SAFE_UPDATES = 0;
 
 -- Insert data into the DEPARTMENT table
 INSERT INTO department (department_id, department_name, creation_date, head_teacher_id) 
@@ -48,31 +49,11 @@ VALUES
 ('LTHDT', 'THDC'),
 ('PTTKHTTT', 'CSDL');
 
--- Insert data into the TEACHING table
-INSERT INTO teaching (class_id, subject_id, teacher_id, semester, year, start_date, end_date) 
-VALUES 
-('K11', 'THDC', 'GV07', 1, 2006, '2006-02-01', '2006-12-05'),
-('K12', 'THDC', 'GV06', 1, 2006, '2006-02-01', '2006-12-05'),
-('K13', 'THDC', 'GV15', 1, 2006, '2006-02-01', '2006-12-05'),
-('K11', 'CTRR', 'GV02', 1, 2006, '2006-09-01', '2006-05-17'),
-('K12', 'CTRR', 'GV02', 1, 2006, '2006-09-01', '2006-05-17'),
-('K13', 'CTRR', 'GV08', 1, 2006, '2006-09-01', '2006-05-17'),
-('K11', 'CSDL', 'GV05', 2, 2006, '2006-01-06', '2006-07-15'),
-('K12', 'CSDL', 'GV09', 2, 2006, '2006-01-06', '2006-07-15'),
-('K13', 'CTDLGT', 'GV15', 2, 2006, '2006-01-06', '2006-07-15'),
-('K13', 'CSDL', 'GV05', 3, 2006, '2006-01-08', '2006-12-15'),
-('K13', 'DHMT', 'GV07', 3, 2006, '2006-01-08', '2006-12-15'),
-('K11', 'CTDLGT', 'GV15', 3, 2006, '2006-01-08', '2006-12-15'),
-('K12', 'CTDLGT', 'GV15', 3, 2006, '2006-01-08', '2006-12-15'),
-('K11', 'HDH', 'GV04', 1, 2007, '2007-02-01', '2007-02-18'),
-('K12', 'HDH', 'GV04', 1, 2007, '2007-02-01', '2007-03-20'),
-('K11', 'DHMT', 'GV07', 1, 2007, '2007-02-18', '2007-03-20');
-
 -- Insert data into the TEACHER table
-INSERT INTO teacher (teacher_id, full_name, degree, academic_title, gender, birth_date, hire_date, coefficient_salary, salary, department_id) 
+INSERT INTO teacher (teacher_id, full_name, degree, academic_title, gender, birth_date, start_date, coefficient_salary, salary, department_id) 
 VALUES 
 ('GV01', 'Ho Thanh Son', 'PTS', 'GS', 'Nam', '1950-02-05', '2004-11-01', 5, 2250000, 'KHMT'),
-('GV02', 'Tran Tam Thanh', 'TS', 'PGS', 'Nam', '1965-12-17', '2004-04-20', 4.5, 2025000, 'HTTT'),
+('GV02', 'Tran Tam Thanh', 'TS', 'PGS', 'Nam', '1965-12-17', '2004-04-20', 4.5, 2025000, 'KHMT'),
 ('GV03', 'Do Nghiem Phung', 'TS', 'GS', 'Nu', '1950-01-08', '2004-09-23', 4, 1800000, 'CNPM'),
 ('GV04', 'Tran Nam Son', 'TS', 'PGS', 'Nam', '1961-02-22', '2005-12-01', 4.5, 2025000, 'KTMT'),
 ('GV05', 'Mai Thanh Danh', 'ThS', 'GV', 'Nam', '1958-12-03', '2005-12-01', 3, 1350000, 'HTTT'),
@@ -86,6 +67,26 @@ VALUES
 ('GV13', 'Nguyen Linh Dan', 'CN', NULL, 'Nu', '1980-05-23', '2005-05-15', 1.69, 760500, 'KTMT'),
 ('GV14', 'Truong Minh Chau', 'ThS', 'GV', 'Nu', '1976-11-30', '2005-05-15', 3, 1350000, 'MTT'),
 ('GV15', 'Le Ha Thanh', 'ThS', 'GV', 'Nam', '1978-04-05', '2005-05-15', 3, 1350000, 'KHMT');
+
+-- Insert data into the TEACHING table
+INSERT INTO teaching (class_id, subject_id, teacher_id, semester, year, start_date, end_date) 
+VALUES 
+('K11', 'THDC', 'GV07', 1, 2006, '2006-02-01', '2006-12-05'),
+('K12', 'THDC', 'GV06', 1, 2006, '2006-02-01', '2006-12-05'),
+('K13', 'THDC', 'GV15', 1, 2006, '2006-02-01', '2006-12-05'),
+('K11', 'CTRR', 'GV02', 1, 2006, '2006-01-09', '2006-05-17'),
+('K12', 'CTRR', 'GV02', 1, 2006, '2006-01-09', '2006-05-17'),
+('K13', 'CTRR', 'GV08', 1, 2006, '2006-01-09', '2006-05-17'),
+('K11', 'CSDL', 'GV05', 2, 2006, '2006-06-01', '2006-07-15'),
+('K12', 'CSDL', 'GV09', 2, 2006, '2006-06-01', '2006-07-15'),
+('K13', 'CTDLGT', 'GV15', 2, 2006, '2006-06-01', '2006-07-15'),
+('K13', 'CSDL', 'GV05', 3, 2006, '2006-08-01', '2006-12-15'),
+('K13', 'DHMT', 'GV07', 3, 2006, '2006-08-01', '2006-12-15'),
+('K11', 'CTDLGT', 'GV15', 3, 2006, '2006-08-01', '2006-12-15'),
+('K12', 'CTDLGT', 'GV15', 3, 2006, '2006-08-01', '2006-12-15'),
+('K11', 'HDH', 'GV04', 1, 2007, '2007-01-02', '2007-02-18'),
+('K12', 'HDH', 'GV04', 1, 2007, '2007-01-02', '2007-03-20'),
+('K11', 'DHMT', 'GV07', 1, 2007, '2007-02-18', '2007-03-20');
 
 -- insert data into STUDENT table 
 INSERT INTO student (student_id, last_name, first_name, birth_date, gender, birth_place, class_id, note, average_score, classification)
@@ -135,7 +136,7 @@ VALUES
 ('K1101', 'CTRR', 1, '2006-05-13', 9.5, 'Dat'),
 ('K1102', 'CSDL', 1, '2006-07-20', 4, 'Khong Dat'),
 ('K1102', 'CSDL', 2, '2006-07-27', 4.25, 'Khong Dat'),
-('K1102', 'CSDL', 3, '2006-10-08', 4.5, 'Khong Dat'),
+('K1102', 'CSDL', 3, '2006-08-10', 4.5, 'Khong Dat'),
 ('K1102', 'CTDLGT', 1, '2006-12-28', 4.5, 'Khong Dat'),
 ('K1102', 'CTDLGT', 2, '2007-05-01', 4, 'Khong Dat'),
 ('K1102', 'CTDLGT', 3, '2007-01-15', 6, 'Dat'),
@@ -198,3 +199,4 @@ VALUES
 
 -- Re-enable foreign key checks
 SET FOREIGN_KEY_CHECKS = 1;
+SET SQL_SAFE_UPDATES = 1;

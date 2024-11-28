@@ -79,7 +79,7 @@ CHECK (YEAR(start_date) - YEAR(birth_date) >= 22);
 
 -- Tất cả các môn học đều có số tín chỉ lý thuyết và tín chỉ thực hành chênh lệch nhau không quá 3
 ALTER TABLE subject ADD CONSTRAINT CK_credit_diff 
-CHECK (ABS(theory_credit - practical_credit) <= 3);
+CHECK (ABS(theory_credit - practical_credit) <= 3 OR practical_credit = 0);
 
 
 

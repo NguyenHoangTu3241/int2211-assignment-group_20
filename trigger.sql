@@ -1,6 +1,6 @@
 USE academic_administration;
 
--- Lớp trưởng của một lớp phải là học viên của lớp đó.
+-- Lớp trưởng của một lớp phải là học viên của lớp đó
 
 DELIMITER $$
 
@@ -13,7 +13,7 @@ BEGIN
         WHERE student.student_id = NEW.class_leader_id 
           AND student.class_id != NEW.class_id) > 0 THEN
         SIGNAL SQLSTATE '45000' 
-            SET MESSAGE_TEXT = 'Class leader must belong to the same class';
+            SET MESSAGE_TEXT = 'Lớp trưởng của một lớp phải là học viên của lớp đó';
     END IF;
 END$$
 
@@ -26,7 +26,7 @@ BEGIN
         WHERE student.student_id = NEW.class_leader_id 
           AND student.class_id != NEW.class_id) > 0 THEN
         SIGNAL SQLSTATE '45000' 
-            SET MESSAGE_TEXT = 'Class leader must belong to the same class';
+            SET MESSAGE_TEXT = 'Lớp trưởng của một lớp phải là học viên của lớp đó';
     END IF;
 END$$
 
@@ -46,14 +46,14 @@ BEGIN
           AND (teacher.degree NOT IN ('TS', 'PTS') 
             OR teacher.department_id != NEW.department_id)) > 0 THEN
         SIGNAL SQLSTATE '45000' 
-            SET MESSAGE_TEXT = 'Head of department must belong to the same department and have a degree of TS or PTS';
+            SET MESSAGE_TEXT = 'Trưởng khoa phải là giáo viên thuộc khoa và có học vị “TS” hoặc “PTS”';
     END IF;
 END$$
 
 DELIMITER ;
 
 -- Học viên chỉ được thi một môn học nào đó khi lớp của học viên đã học xong môn học này
-
+-- drop trigger trg_insert_exam;
 DELIMITER $$
 
 CREATE TRIGGER trg_insert_exam
@@ -65,12 +65,12 @@ BEGIN
             FROM teaching 
             WHERE teaching.class_id = (SELECT class_id FROM student WHERE student.student_id = NEW.student_id)
         ) 
-        OR NEW.exam_date > (SELECT end_date 
+        OR NEW.exam_date < (SELECT end_date 
                             FROM teaching 
                             WHERE teaching.subject_id = NEW.subject_id 
                               AND teaching.class_id = (SELECT class_id FROM student WHERE student.student_id = NEW.student_id))) THEN
         SIGNAL SQLSTATE '45000' 
-            SET MESSAGE_TEXT = 'Student can only take an exam if the class has completed the subject';
+            SET MESSAGE_TEXT = 'Học viên chỉ được thi một môn học nào đó khi lớp của học viên đã học xong môn học này';
     END IF;
 END$$
 
@@ -90,7 +90,7 @@ BEGIN
           AND year = NEW.year 
           AND class_id = NEW.class_id) >= 3 THEN
         SIGNAL SQLSTATE '45000' 
-            SET MESSAGE_TEXT = 'Each class can only study a maximum of 3 subjects per semester';
+            SET MESSAGE_TEXT = 'Mỗi học kỳ của một năm học, một lớp chỉ được học tối đa 3 môn';
     END IF;
 END$$
 
@@ -104,7 +104,7 @@ BEGIN
           AND year = NEW.year 
           AND class_id = NEW.class_id) >= 3 THEN
         SIGNAL SQLSTATE '45000' 
-            SET MESSAGE_TEXT = 'Each class can only study a maximum of 3 subjects per semester';
+            SET MESSAGE_TEXT = 'Mỗi học kỳ của một năm học, một lớp chỉ được học tối đa 3 môn';
     END IF;
 END$$
 
@@ -374,7 +374,7 @@ BEGIN
               SELECT subject_id 
               FROM teaching 
               WHERE class_id = NEW.class_id 
-                AND end_date >= NEW.start_date
+                AND end_date > NEW.start_date
           )
     ) THEN
         SIGNAL SQLSTATE '45000' 
