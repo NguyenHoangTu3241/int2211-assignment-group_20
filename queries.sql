@@ -475,13 +475,13 @@ HAVING
 -- Câu 32*: Tìm học viên (mã học viên, họ tên) thi môn nào cũng đạt (chỉ xét lần thi sau cùng)
 SELECT 
     s.student_id AS "Student ID",
-    CONCAT(s.first_name, ' ', s.last_name) AS "Full Name"
+    CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
 FROM 
     student s
 JOIN 
     exam_results e ON s.student_id = e.student_id
 WHERE 
-    e.exam_number = (SELECT MAX(exam_number) FROM exam_results e2 WHERE e2.student_id = s.student_id AND e2.subject_id = e.subject_id)
+    e.attempt_number = (SELECT MAX(attempt_number) FROM exam_results e2 WHERE e2.student_id = s.student_id AND e2.subject_id = e.subject_id)
 GROUP BY 
     s.student_id
 HAVING 
