@@ -225,7 +225,310 @@ WHERE
         )
     );
 
+-- Câu 16: Tìm họ tên giáo viên dạy môn CTRR cho ít nhất hai lớp trong cùng một học kỳ của một năm học.
+SELECT 
+    te.teacher_id AS "Teacher ID", 
+    te.full_name AS "Teacher Name"
+FROM 
+    teaching t
+JOIN 
+    teacher te ON t.teacher_id = te.teacher_id
+WHERE 
+    t.subject_id = 'CTRR'
+GROUP BY 
+    t.teacher_id, t.semester, t.year
+HAVING 
+    COUNT(DISTINCT t.class_id) >= 2;
 
+-- Câu 17: Danh sách học viên và điểm thi môn CSDL (chỉ lấy điểm của lần thi sau cùng).
+SELECT 
+    s.student_id AS "Student ID",
+    CONCAT(s.last_name, ' ', s.first_name) AS "Full Name",
+    e.subject_id AS "Subject ID",
+    e.score AS "Final Score"
+FROM 
+    exam_results e
+JOIN 
+    student s ON e.student_id = s.student_id
+WHERE 
+    e.subject_id = 'CSDL'
+    AND e.attempt_number = (
+        SELECT MAX(e2.attempt_number)
+        FROM exam_results e2
+        WHERE e2.student_id = e.student_id AND e2.subject_id = e.subject_id
+    );
 
+-- Câu 18: Danh sách học viên và điểm thi môn “Co So Du Lieu” (chỉ lấy điểm cao nhất của các lần thi).
+SELECT 
+    s.student_id AS "Student ID",
+    CONCAT(s.last_name, ' ', s.first_name) AS "Full Name",
+    e.subject_id AS "Subject ID",
+    MAX(e.score) AS "Highest Score"
+FROM 
+    exam_results e
+JOIN 
+    student s ON e.student_id = s.student_id
+WHERE 
+    e.subject_id = 'CSDL'
+GROUP BY 
+    e.student_id, e.subject_id;
+    
+-- Câu 19: Khoa nào (mã khoa, tên khoa) được thành lập sớm nhất
+SELECT 
+    d.department_id AS "Department ID",
+    d.department_name AS "Department Name",
+    d.creation_date AS "Founded Year"
+FROM 
+    department d
+ORDER BY 
+    d.creation_date ASC
+LIMIT 1;
 
+-- Câu 20: Có bao nhiêu giáo viên có học hàm là “GS” hoặc “PGS”
+SELECT 
+    COUNT(*) AS "Professor Count"
+FROM 
+    teacher
+WHERE 
+    academic_title IN ('GS', 'PGS');
+    
+-- Câu 21: Thống kê có bao nhiêu giáo viên có học vị là “CN”, “KS”, “Ths”, “TS”, “PTS” trong mỗi khoa
+SELECT 
+    d.department_id AS "Department ID",
+    d.department_name AS "Department Name",
+    t.degree AS "Degree",
+    COUNT(*) AS "Teacher Count"
+FROM 
+    teacher t
+JOIN 
+    department d ON t.department_id = d.department_id
+WHERE 
+    t.degree IN ('CN', 'KS', 'ThS', 'TS', 'PTS')
+GROUP BY 
+    d.department_id, t.degree;
+
+-- Câu 22: Mỗi môn học thống kê số lượng học viên theo kết quả (đạt và không đạt)
+SELECT 
+    e.subject_id AS "Subject ID",
+    su.subject_name AS "Subject Name",
+    CASE 
+        WHEN e.score >= 5 THEN 'Pass'
+        ELSE 'Fail'
+    END AS "Result",
+    COUNT(*) AS "Student Count"
+FROM 
+    exam_results e
+JOIN 
+    subject su ON e.subject_id = su.subject_id
+GROUP BY 
+    e.subject_id, 
+    CASE 
+        WHEN e.score >= 5 THEN 'Pass'
+        ELSE 'Fail'
+    END;
+
+-- Câu 23: Tìm giáo viên (mã giáo viên, họ tên) là giáo viên chủ nhiệm của một lớp, đồng thời dạy cho lớp đó ít nhất một môn học
+SELECT 
+    te.teacher_id AS "Teacher ID",
+    te.full_name AS "Teacher Name"
+FROM 
+    teacher te
+JOIN 
+    class c ON te.teacher_id = c.head_teacher_id
+JOIN 
+    teaching t ON t.teacher_id = te.teacher_id AND t.class_id = c.class_id
+GROUP BY 
+    te.teacher_id;
+
+-- Câu 24: Tìm họ tên lớp trưởng của lớp có sỉ số cao nhất
+SELECT 
+    CONCAT(s.last_name, ' ', s.first_name) AS "Class Leader Name"
+FROM 
+    class c
+JOIN 
+    student s ON c.class_leader_id = s.student_id
+ORDER BY 
+    c.size DESC
+LIMIT 1;
+
+-- Câu 25*: Tìm danh sách họ tên của các lớp trưởng thuộc lớp "K11" mà đã thi không đạt tối đa 3 môn, mỗi môn đều thi không đạt ở tất cả các lần thi.
+SELECT 
+    CONCAT(s.first_name, ' ', s.last_name) AS "Class Leader Name"
+FROM 
+    class c
+JOIN 
+    student s ON c.class_leader_id = s.student_id
+WHERE 
+    c.class_id = 'K11'
+    AND (
+        SELECT COUNT(DISTINCT e.subject_id)
+        FROM exam_results e
+        WHERE e.student_id = s.student_id
+        AND e.score < 5
+        AND NOT EXISTS (
+            SELECT 1
+            FROM exam_results e2
+            WHERE e2.student_id = e.student_id 
+            AND e2.subject_id = e.subject_id 
+            AND e2.score >= 5
+        )
+    ) <= 3;
+
+-- Câu 26: Tìm học viên (mã học viên, họ tên) có số môn đạt điểm 9, 10 nhiều nhất
+SELECT 
+    s.student_id AS "Student ID",
+    CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
+FROM 
+    student s
+JOIN 
+    exam_results e ON s.student_id = e.student_id
+WHERE 
+    e.score IN (9, 10)
+GROUP BY 
+    s.student_id
+ORDER BY 
+    COUNT(*) DESC
+LIMIT 1;
+
+-- Câu 27: Trong từng lớp, tìm học viên (mã học viên, họ tên) có số môn đạt điểm 9,10 nhiều nhất.
+SELECT 
+    s.class_id AS "Class ID",
+    s.student_id AS "Student ID",
+    CONCAT(s.last_name, ' ', s.first_name) AS "Full Name",
+    COUNT(*) AS "Number Of Subjects"
+FROM 
+    student s
+JOIN 
+    exam_results e ON s.student_id = e.student_id
+WHERE 
+    e.score IN (9, 10)
+GROUP BY 
+    s.class_id, s.student_id
+ORDER BY 
+    s.class_id, COUNT(*) DESC;
+
+-- Câu 28: Trong từng học kỳ của từng năm, mỗi giáo viên phân công dạy bao nhiêu môn học, bao nhiêu lớp
+SELECT 
+    t.teacher_id AS "Teacher ID",
+    te.full_name AS "Teacher Name",
+    t.semester AS "Semester",
+    t.year AS "Year",
+    COUNT(DISTINCT t.subject_id) AS "Subjects Taught",
+    COUNT(DISTINCT t.class_id) AS "Classes Taught"
+FROM 
+    teaching t
+JOIN 
+    teacher te ON t.teacher_id = te.teacher_id
+GROUP BY 
+    t.teacher_id, t.semester, t.year;
+
+-- Câu 29: Trong từng học kỳ của từng năm, tìm giáo viên (mã giáo viên, họ tên) giảng dạy nhiều nhất
+SELECT 
+    t.teacher_id AS "Teacher ID",
+    te.full_name AS "Teacher Name",
+    t.semester AS "Semester",
+    t.year AS "Year",
+    COUNT(DISTINCT t.class_id) AS "Number of Classes"
+FROM 
+    teaching t
+JOIN 
+    teacher te ON t.teacher_id = te.teacher_id
+GROUP BY 
+    t.semester, t.year, t.teacher_id
+ORDER BY 
+    t.semester, t.year, COUNT(DISTINCT t.class_id) DESC
+LIMIT 1;
+
+-- Câu 30: Tìm môn học (mã môn học, tên môn học) có nhiều học viên thi không đạt ở lần thi thứ 1
+SELECT 
+    e.subject_id AS "Subject ID",
+    su.subject_name AS "Subject Name",
+    COUNT(*) AS "Number of Failing Students"
+FROM 
+    exam_results e
+JOIN 
+    subject su ON e.subject_id = su.subject_id
+WHERE 
+    e.attempt_number = 1
+    AND e.score < 5
+GROUP BY 
+    e.subject_id
+ORDER BY 
+    COUNT(*) DESC
+LIMIT 1;
+
+-- Câu 31: Tìm học viên (mã học viên, họ tên) thi môn nào cũng đạt (chỉ xét lần thi thứ 1)
+SELECT 
+    s.student_id AS "Student ID",
+    CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
+FROM 
+    student s
+JOIN 
+    exam_results e ON s.student_id = e.student_id
+WHERE 
+    e.attempt_number = 1
+GROUP BY 
+    s.student_id
+HAVING 
+    COUNT(CASE WHEN e.score >= 5 THEN 1 END) = COUNT(*);
+
+-- Câu 32*: Tìm học viên (mã học viên, họ tên) thi môn nào cũng đạt (chỉ xét lần thi sau cùng)
+SELECT 
+    s.student_id AS "Student ID",
+    CONCAT(s.first_name, ' ', s.last_name) AS "Full Name"
+FROM 
+    student s
+JOIN 
+    exam_results e ON s.student_id = e.student_id
+WHERE 
+    e.exam_number = (SELECT MAX(exam_number) FROM exam_results e2 WHERE e2.student_id = s.student_id AND e2.subject_id = e.subject_id)
+GROUP BY 
+    s.student_id
+HAVING 
+    COUNT(CASE WHEN e.score >= 5 THEN 1 END) = COUNT(*);
+
+-- Câu 33: Tìm học viên (mã học viên, họ tên) đã thi tất cả các môn đều đạt (chỉ xét lần thi thứ 1)
+SELECT 
+    s.student_id AS "Student ID",
+    CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
+FROM 
+    student s
+JOIN 
+    exam_results e ON s.student_id = e.student_id
+WHERE 
+    e.attempt_number = 1
+GROUP BY 
+    s.student_id
+HAVING 
+    COUNT(CASE WHEN e.score >= 5 THEN 1 END) = COUNT(DISTINCT e.subject_id);
+
+-- Câu 34*: Tìm học viên (mã học viên, họ tên) đã thi tất cả các môn đều đạt  (chỉ xét lần thi sau cùng)
+SELECT 
+    s.student_id AS "Student ID",
+    CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
+FROM 
+    student s
+JOIN 
+    exam_results e ON s.student_id = e.student_id
+WHERE 
+    e.attempt_number = (SELECT MAX(attempt_number) FROM exam_results e2 WHERE e2.student_id = s.student_id AND e2.subject_id = e.subject_id)
+GROUP BY 
+    s.student_id
+HAVING 
+    COUNT(CASE WHEN e.score >= 5 THEN 1 END) = COUNT(DISTINCT e.subject_id);
+
+-- Câu 35**: Tìm học viên (mã học viên, họ tên) có điểm thi cao nhất trong từng môn (lấy điểm ở lần thi sau cùng)
+SELECT 
+    e.student_id AS "Student ID",
+    CONCAT(s.last_name, ' ', s.first_name) AS "Full Name",
+    e.subject_id AS "Subject ID",
+    e.score AS "Highest Score"
+FROM 
+    exam_results e
+JOIN 
+    student s ON e.student_id = s.student_id
+WHERE 
+    e.attempt_number = (SELECT MAX(attempt_number) FROM exam_results e2 WHERE e2.student_id = e.student_id AND e2.subject_id = e.subject_id)
+ORDER BY 
+    e.subject_id, e.score DESC;
 
