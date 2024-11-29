@@ -1,9 +1,18 @@
--- Thêm một sinh viên mới vào bảng students và thêm kết quả thi của sinh viên này vào bảng exam_results
--- Nếu có lỗi xảy ra ở bất kỳ bước nào, toàn bộ các thay đổi sẽ bị hủy (rollback).
+-- Bắt đầu giao dịch
 START TRANSACTION;
-INSERT INTO students (student_id, first_name, last_name, class_id) 
-VALUES (1001, 'John', 'Doe', 'K11');
-INSERT INTO exam_results (student_id, subject_id, exam_number, score) 
-VALUES (1001, 'INVALID_SUBJECT', 1, 95);
-ROLLBACK;
 
+-- Thêm học viên mới vào bảng students
+-- (giả sử lớp 'K11' tồn tại trong bảng classes)
+INSERT INTO students (student_id, first_name, last_name, class_id) 
+VALUES ('K1201', 'Jane', 'Smith', 'K11');
+
+-- Thêm kết quả thi cho học viên mới vào bảng exam_results
+-- (giả sử môn 'CTRR' tồn tại trong bảng subjects)
+INSERT INTO exam_results (student_id, subject_id, attempt_number, score)
+VALUES ('K1201', 'CTRR', 1, 75);
+
+-- Nếu không có lỗi, lưu thay đổi
+COMMIT;
+
+-- Nếu gặp lỗi, hủy giao dịch
+ROLLBACK;
