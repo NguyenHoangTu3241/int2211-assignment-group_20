@@ -1,4 +1,6 @@
--- Câu 1: In ra danh sách (mã học viên, họ tên, ngày sinh, mã lớp) lớp trưởng của các lớp
+USE academic_administration;
+
+-- In ra danh sách (mã học viên, họ tên, ngày sinh, mã lớp) lớp trưởng của các lớp
 SELECT 
     s.student_id AS "Student ID",
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name",
@@ -9,7 +11,7 @@ FROM
 JOIN 
     class c ON s.student_id = c.class_leader_id;
 
--- Câu 2: In ra bảng điểm khi thi (mã học viên, họ tên , lần thi, điểm số) môn CTRR của lớp “K12”, sắp xếp theo tên, họ học viên
+-- In ra bảng điểm khi thi (mã học viên, họ tên , lần thi, điểm số) môn CTRR của lớp “K12”, sắp xếp theo tên, họ học viên
 SELECT 
     e.student_id AS "Student ID",
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name",
@@ -24,7 +26,7 @@ WHERE
 ORDER BY 
     s.last_name, s.first_name;
 
--- Câu 3: In ra danh sách những học viên (mã học viên, họ tên) và những môn học mà học viên đó thi lần thứ nhất đã đạt
+-- In ra danh sách những học viên (mã học viên, họ tên) và những môn học mà học viên đó thi lần thứ nhất đã đạt
 SELECT 
     e.student_id AS "Student ID",
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name",
@@ -36,7 +38,7 @@ JOIN
 WHERE 
     e.attempt_number = 1 AND e.score >= 5;
 
--- Câu 4: In ra danh sách học viên (mã học viên, họ tên) của lớp “K11” thi môn CTRR không đạt (ở lần thi 1)
+-- In ra danh sách học viên (mã học viên, họ tên) của lớp “K11” thi môn CTRR không đạt (ở lần thi 1)
 SELECT 
     e.student_id AS "Student ID",
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
@@ -47,7 +49,7 @@ JOIN
 WHERE 
     s.class_id = 'K11' AND e.subject_id = 'CTRR' AND e.attempt_number = 1 AND e.score < 5;
     
--- Câu 5: Danh sách học viên (mã học viên, họ tên) của lớp “K” thi môn CTRR không đạt (ở tất cả các lần thi)
+-- Danh sách học viên (mã học viên, họ tên) của lớp “K” thi môn CTRR không đạt (ở tất cả các lần thi)
 SELECT 
     e.student_id AS "Student ID",
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
@@ -62,7 +64,7 @@ GROUP BY
 HAVING 
     MAX(e.score) < 5;
 
--- Câu 6: Tìm tên những môn học mà giáo viên có tên “Tran Tam Thanh” dạy trong học kỳ 1 năm 2006
+-- Tìm tên những môn học mà giáo viên có tên “Tran Tam Thanh” dạy trong học kỳ 1 năm 2006
 SELECT DISTINCT 
     su.subject_name AS "Subject Name"
 FROM 
@@ -76,7 +78,7 @@ WHERE
     AND t.semester = 1 
     AND t.year = 2006;
 
--- Câu 7: Tìm những môn học (mã môn học, tên môn học) mà giáo viên chủ nhiệm lớp “K11” dạy trong học kỳ 1 năm 2006
+-- Tìm những môn học (mã môn học, tên môn học) mà giáo viên chủ nhiệm lớp “K11” dạy trong học kỳ 1 năm 2006
 SELECT DISTINCT 
     su.subject_id AS "Subject ID", 
     su.subject_name AS "Subject Name"
@@ -108,7 +110,7 @@ WHERE
     te.full_name = 'Nguyen To Lan' 
     AND su.subject_name = 'Co So Du Lieu';
 
--- Câu 9: In ra danh sách những môn học (mã môn học, tên môn học) phải học liền trước môn “Co So Du Lieu”.
+-- In ra danh sách những môn học (mã môn học, tên môn học) phải học liền trước môn “Co So Du Lieu”.
 SELECT 
     p.prerequisite_subject_id AS "Subject ID", 
     su.subject_name AS "Subject Name"
@@ -119,7 +121,7 @@ JOIN
 WHERE 
     p.subject_id = 'CSDL';
 
--- Câu 10: Môn “Cau Truc Roi Rac” là môn bắt buộc phải học liền trước những môn học (mã môn học, tên môn học) nào.
+-- Môn “Cau Truc Roi Rac” là môn bắt buộc phải học liền trước những môn học (mã môn học, tên môn học) nào.
 SELECT 
     p.subject_id AS "Subject ID", 
     su.subject_name AS "Subject Name"
@@ -130,7 +132,7 @@ JOIN
 WHERE 
     p.prerequisite_subject_id = 'CTRR';
     
--- Câu 11: Tìm họ tên giáo viên dạy môn CTRR cho cả hai lớp “K11” và “K12” trong cùng học kỳ 1 năm 2006.
+-- Tìm họ tên giáo viên dạy môn CTRR cho cả hai lớp “K11” và “K12” trong cùng học kỳ 1 năm 2006.
 SELECT DISTINCT 
     te.full_name AS "Teacher Name"
 FROM 
@@ -149,7 +151,7 @@ WHERE
     AND t2.semester = 1 
     AND t2.year = 2006;
 
--- Câu 12: Tìm những học viên (mã học viên, họ tên) thi không đạt môn CSDL ở lần thi thứ 1 nhưng chưa thi lại môn này.
+-- Tìm những học viên (mã học viên, họ tên) thi không đạt môn CSDL ở lần thi thứ 1 nhưng chưa thi lại môn này.
 SELECT 
     s.student_id AS "Student ID", 
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
@@ -169,7 +171,7 @@ WHERE
         AND e2.attempt_number > 1
     );
 
--- Câu 13: Tìm giáo viên (mã giáo viên, họ tên) không được phân công giảng dạy bất kỳ môn học nào.
+-- Tìm giáo viên (mã giáo viên, họ tên) không được phân công giảng dạy bất kỳ môn học nào.
 SELECT 
     te.teacher_id AS "Teacher ID", 
     te.full_name AS "Full Name"
@@ -182,7 +184,7 @@ WHERE
         WHERE t.teacher_id = te.teacher_id
     );
 
--- Câu 14: Tìm giáo viên (mã giáo viên, họ tên) không được phân công giảng dạy bất kỳ môn học nào thuộc khoa giáo viên đó phụ trách.
+-- Tìm giáo viên (mã giáo viên, họ tên) không được phân công giảng dạy bất kỳ môn học nào thuộc khoa giáo viên đó phụ trách.
 SELECT 
     te.teacher_id AS "Teacher ID", 
     te.full_name AS "Full Name"
@@ -197,7 +199,7 @@ WHERE
         AND su.department_id = te.department_id
     );
 
--- Câu 15: Tìm họ tên các học viên thuộc lớp “K11” thi một môn bất kỳ 3 lần vẫn “Khong dat” hoặc thi lần thứ 2 môn CTRR được 5 điểm.
+-- Tìm họ tên các học viên thuộc lớp “K11” thi một môn bất kỳ 3 lần vẫn “Khong dat” hoặc thi lần thứ 2 môn CTRR được 5 điểm.
 SELECT DISTINCT 
     s.student_id AS "Student ID", 
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
@@ -225,7 +227,7 @@ WHERE
         )
     );
 
--- Câu 16: Tìm họ tên giáo viên dạy môn CTRR cho ít nhất hai lớp trong cùng một học kỳ của một năm học.
+-- Tìm họ tên giáo viên dạy môn CTRR cho ít nhất hai lớp trong cùng một học kỳ của một năm học.
 SELECT 
     te.teacher_id AS "Teacher ID", 
     te.full_name AS "Teacher Name"
@@ -240,7 +242,7 @@ GROUP BY
 HAVING 
     COUNT(DISTINCT t.class_id) >= 2;
 
--- Câu 17: Danh sách học viên và điểm thi môn CSDL (chỉ lấy điểm của lần thi sau cùng).
+-- Danh sách học viên và điểm thi môn CSDL (chỉ lấy điểm của lần thi sau cùng).
 SELECT 
     s.student_id AS "Student ID",
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name",
@@ -258,7 +260,7 @@ WHERE
         WHERE e2.student_id = e.student_id AND e2.subject_id = e.subject_id
     );
 
--- Câu 18: Danh sách học viên và điểm thi môn “Co So Du Lieu” (chỉ lấy điểm cao nhất của các lần thi).
+-- Danh sách học viên và điểm thi môn “Co So Du Lieu” (chỉ lấy điểm cao nhất của các lần thi).
 SELECT 
     s.student_id AS "Student ID",
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name",
@@ -273,7 +275,7 @@ WHERE
 GROUP BY 
     e.student_id, e.subject_id;
     
--- Câu 19: Khoa nào (mã khoa, tên khoa) được thành lập sớm nhất
+-- Khoa nào (mã khoa, tên khoa) được thành lập sớm nhất
 SELECT 
     d.department_id AS "Department ID",
     d.department_name AS "Department Name",
@@ -284,7 +286,7 @@ ORDER BY
     d.creation_date ASC
 LIMIT 1;
 
--- Câu 20: Có bao nhiêu giáo viên có học hàm là “GS” hoặc “PGS”
+-- Có bao nhiêu giáo viên có học hàm là “GS” hoặc “PGS”
 SELECT 
     COUNT(*) AS "Professor Count"
 FROM 
@@ -307,7 +309,7 @@ WHERE
 GROUP BY 
     d.department_id, t.degree;
 
--- Câu 22: Mỗi môn học thống kê số lượng học viên theo kết quả (đạt và không đạt)
+-- Mỗi môn học thống kê số lượng học viên theo kết quả (đạt và không đạt)
 SELECT 
     e.subject_id AS "Subject ID",
     su.subject_name AS "Subject Name",
@@ -327,7 +329,7 @@ GROUP BY
         ELSE 'Fail'
     END;
 
--- Câu 23: Tìm giáo viên (mã giáo viên, họ tên) là giáo viên chủ nhiệm của một lớp, đồng thời dạy cho lớp đó ít nhất một môn học
+-- Tìm giáo viên (mã giáo viên, họ tên) là giáo viên chủ nhiệm của một lớp, đồng thời dạy cho lớp đó ít nhất một môn học
 SELECT 
     te.teacher_id AS "Teacher ID",
     te.full_name AS "Teacher Name"
@@ -351,7 +353,7 @@ ORDER BY
     c.size DESC
 LIMIT 1;
 
--- Câu 25*: Tìm danh sách họ tên của các lớp trưởng thuộc lớp "K11" mà đã thi không đạt tối đa 3 môn, mỗi môn đều thi không đạt ở tất cả các lần thi.
+-- Tìm danh sách họ tên của các lớp trưởng thuộc lớp "K11" mà đã thi không đạt tối đa 3 môn, mỗi môn đều thi không đạt ở tất cả các lần thi.
 SELECT 
     CONCAT(s.first_name, ' ', s.last_name) AS "Class Leader Name"
 FROM 
@@ -374,7 +376,7 @@ WHERE
         )
     ) <= 3;
 
--- Câu 26: Tìm học viên (mã học viên, họ tên) có số môn đạt điểm 9, 10 nhiều nhất
+-- Tìm học viên (mã học viên, họ tên) có số môn đạt điểm 9, 10 nhiều nhất
 SELECT 
     s.student_id AS "Student ID",
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
@@ -407,7 +409,7 @@ GROUP BY
 ORDER BY 
     s.class_id, COUNT(*) DESC;
 
--- Câu 28: Trong từng học kỳ của từng năm, mỗi giáo viên phân công dạy bao nhiêu môn học, bao nhiêu lớp
+-- Trong từng học kỳ của từng năm, mỗi giáo viên phân công dạy bao nhiêu môn học, bao nhiêu lớp
 SELECT 
     t.teacher_id AS "Teacher ID",
     te.full_name AS "Teacher Name",
@@ -422,7 +424,7 @@ JOIN
 GROUP BY 
     t.teacher_id, t.semester, t.year;
 
--- Câu 29: Trong từng học kỳ của từng năm, tìm giáo viên (mã giáo viên, họ tên) giảng dạy nhiều nhất
+-- Trong từng học kỳ của từng năm, tìm giáo viên (mã giáo viên, họ tên) giảng dạy nhiều nhất
 SELECT 
     t.teacher_id AS "Teacher ID",
     te.full_name AS "Teacher Name",
@@ -439,7 +441,7 @@ ORDER BY
     t.semester, t.year, COUNT(DISTINCT t.class_id) DESC
 LIMIT 1;
 
--- Câu 30: Tìm môn học (mã môn học, tên môn học) có nhiều học viên thi không đạt ở lần thi thứ 1
+-- Tìm môn học (mã môn học, tên môn học) có nhiều học viên thi không đạt ở lần thi thứ 1
 SELECT 
     e.subject_id AS "Subject ID",
     su.subject_name AS "Subject Name",
@@ -457,7 +459,7 @@ ORDER BY
     COUNT(*) DESC
 LIMIT 1;
 
--- Câu 31: Tìm học viên (mã học viên, họ tên) thi môn nào cũng đạt (chỉ xét lần thi thứ 1)
+-- Tìm học viên (mã học viên, họ tên) thi môn nào cũng đạt (chỉ xét lần thi thứ 1)
 SELECT 
     s.student_id AS "Student ID",
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
@@ -472,7 +474,7 @@ GROUP BY
 HAVING 
     COUNT(CASE WHEN e.score >= 5 THEN 1 END) = COUNT(*);
 
--- Câu 32*: Tìm học viên (mã học viên, họ tên) thi môn nào cũng đạt (chỉ xét lần thi sau cùng)
+-- Tìm học viên (mã học viên, họ tên) thi môn nào cũng đạt (chỉ xét lần thi sau cùng)
 SELECT 
     s.student_id AS "Student ID",
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
@@ -487,7 +489,7 @@ GROUP BY
 HAVING 
     COUNT(CASE WHEN e.score >= 5 THEN 1 END) = COUNT(*);
 
--- Câu 33: Tìm học viên (mã học viên, họ tên) đã thi tất cả các môn đều đạt (chỉ xét lần thi thứ 1)
+-- Tìm học viên (mã học viên, họ tên) đã thi tất cả các môn đều đạt (chỉ xét lần thi thứ 1)
 SELECT 
     s.student_id AS "Student ID",
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
@@ -502,7 +504,7 @@ GROUP BY
 HAVING 
     COUNT(CASE WHEN e.score >= 5 THEN 1 END) = COUNT(DISTINCT e.subject_id);
 
--- Câu 34*: Tìm học viên (mã học viên, họ tên) đã thi tất cả các môn đều đạt  (chỉ xét lần thi sau cùng)
+-- Tìm học viên (mã học viên, họ tên) đã thi tất cả các môn đều đạt (chỉ xét lần thi sau cùng)
 SELECT 
     s.student_id AS "Student ID",
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name"
@@ -517,7 +519,7 @@ GROUP BY
 HAVING 
     COUNT(CASE WHEN e.score >= 5 THEN 1 END) = COUNT(DISTINCT e.subject_id);
 
--- Câu 35**: Tìm học viên (mã học viên, họ tên) có điểm thi cao nhất trong từng môn (lấy điểm ở lần thi sau cùng)
+-- Tìm học viên (mã học viên, họ tên) có điểm thi cao nhất trong từng môn (lấy điểm ở lần thi sau cùng)
 SELECT 
     e.student_id AS "Student ID",
     CONCAT(s.last_name, ' ', s.first_name) AS "Full Name",
