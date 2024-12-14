@@ -1,6 +1,8 @@
+USE academic_administration;
+
 -- Thêm dữ liệu một sinh viên mới
 DELIMITER $$
-CREATE PROCEDURE ThemSinhVien(
+CREATE PROCEDURE sp_add_student(
 in MSV char(5), 
 in Last_Name varchar(40), 
 in First_Name varchar(10),
@@ -31,7 +33,7 @@ DELIMITER ;
 
 -- Thêm thông tin một lớp học mới
 DELIMITER $$
-CREATE PROCEDURE ThemLopHocMoi(
+CREATE PROCEDURE sp_add_class(
     IN New_Class_ID CHAR(3), 
     IN New_Class_Name VARCHAR(40), 
     IN New_Class_Leader_ID CHAR(5), 
@@ -64,7 +66,7 @@ DELIMITER ;
 
 -- Tính điểm thi trung bình của một môn học
 DELIMITER $$
-CREATE PROCEDURE Average_Score_Of_A_Subject(IN ID_of_subject VARCHAR(10))
+CREATE PROCEDURE sp_get_avg_score_of_a_subject(IN ID_of_subject VARCHAR(10))
 BEGIN
 	-- Kiểm tra môn học có tồn tại không
 	IF NOT EXISTS (SELECT 1 FROM subject WHERE subject_id = ID_of_subject) THEN
@@ -76,6 +78,7 @@ BEGIN
 	FROM exam_results
 	WHERE subject_id = ID_of_subject;
 END $$
+
 DELIMITER //
 
 -- Tăng hệ số lương thêm 0.2 cho những giáo viên là trưởng khoa
