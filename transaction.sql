@@ -19,6 +19,6 @@ INSERT INTO prerequisite (subject_id, prerequisite_subject_id)
 VALUES ('CSTTNT', 'CTDLGT');
 
 INSERT INTO teaching (class_id, subject_id, teacher_id, semester, year, start_date, end_date) 
-VALUES ('K12', 'CSTTNT', 'GV04', 1, 2007, '2006-01-08', '2006-12-15');
+VALUES ('K12', 'CSTTNT', 'GV02', 1, 2007, '2007-01-02', '2007-03-20');
 
 ROLLBACK;
