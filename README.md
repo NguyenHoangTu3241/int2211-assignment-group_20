@@ -1,3 +1,9 @@
-# ASSIGNMENT môn CSDL (INT2211) nhóm 20 lớp K68-AI2
+# ASSIGNMENT OF DATABSASE COURSE (INT2211) - ACADEMIC ADMINISTRATION - GROUP 20
 
-Thành viên: Đàm Lê Minh Quân, Hoàng Sỹ Toàn, Nguyễn Hoàng Tú, Nguyễn Khánh Tùng
+Members: Đàm Lê Minh Quân (23020416), Hoàng Sỹ Toàn (23020426), Nguyễn Hoàng Tú (23020428), Nguyễn Khánh Tùng (23020434)
+
+This repository includes:
+
+- SQL statements to create the database system of Academic administration
+- EER Diagram of the database
+- Detailed assignment report
