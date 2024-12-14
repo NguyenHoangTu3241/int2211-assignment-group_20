@@ -23,7 +23,8 @@ IF GPA < 0 OR GPA > 4 THEN
 	SET MESSAGE_TEXT = 'GPA không hợp lệ! Giá trị phải nằm trong khoảng 0-4.';
 END IF;
 
-INSERT INTO student(student_id, last_name, first_name, birth_date, gender, birth_place, class_id, note, average_score, classification)
+INSERT INTO student(student_id, last_name, first_name, birth_date, gender, 
+birth_place, class_id, note, average_score, classification)
 VALUES(MSV, Last_Name, First_Name, birthday, sex, birthplace, Class_ID, Note, GPA, Classification);
 END $$
 DELIMITER ;

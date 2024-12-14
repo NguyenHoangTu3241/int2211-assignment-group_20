@@ -50,7 +50,8 @@ VALUES
 ('PTTKHTTT', 'CSDL');
 
 -- Insert data into the TEACHER table
-INSERT INTO teacher (teacher_id, full_name, degree, academic_title, gender, birth_date, start_date, coefficient_salary, salary, department_id) 
+INSERT INTO teacher (teacher_id, full_name, degree, academic_title, gender, 
+birth_date, start_date, coefficient_salary, salary, department_id) 
 VALUES 
 ('GV01', 'Ho Thanh Son', 'PTS', 'GS', 'Nam', '1950-02-05', '2004-11-01', 5, 2250000, 'KHMT'),
 ('GV02', 'Tran Tam Thanh', 'TS', 'PGS', 'Nam', '1965-12-17', '2004-04-20', 4.5, 2025000, 'KHMT'),
@@ -89,7 +90,8 @@ VALUES
 ('K11', 'DHMT', 'GV07', 1, 2007, '2007-02-18', '2007-03-20');
 
 -- insert data into STUDENT table 
-INSERT INTO student (student_id, last_name, first_name, birth_date, gender, birth_place, class_id, note, average_score, classification)
+INSERT INTO student (student_id, last_name, first_name, birth_date, gender, 
+birth_place, class_id, note, average_score, classification)
 VALUES
 ('K1101', 'Nguyen Van', 'A', '1986-01-27', 'Nam', 'TpHCM', 'K11', NULL, NULL, NULL),
 ('K1102', 'Tran Ngoc', 'Han', '1986-03-14', 'Nu', 'Kien Giang', 'K11', NULL, NULL, NULL),

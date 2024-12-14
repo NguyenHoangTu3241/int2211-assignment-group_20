@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-=======
 USE academic_administration;
 
 -- update dữ liệu mới
@@ -24,5 +22,3 @@ INSERT INTO teaching (class_id, subject_id, teacher_id, semester, year, start_da
 VALUES ('K12', 'CSTTNT', 'GV04', 1, 2007, '2006-01-08', '2006-12-15');
 
 ROLLBACK;
-
->>>>>>> 6dd22a6b6a0d76671b24f46c9d24677fd2d10ab9

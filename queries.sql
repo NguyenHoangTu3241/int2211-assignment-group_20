@@ -172,13 +172,10 @@ WHERE
     );
 
 -- Tìm giáo viên (mã giáo viên, họ tên) không được phân công giảng dạy bất kỳ môn học nào.
-SELECT 
-    te.teacher_id AS "Teacher ID", 
-    te.full_name AS "Full Name"
-FROM 
-    teacher te
-WHERE 
-    NOT EXISTS (
+SELECT te.teacher_id AS "Teacher ID", 
+	   te.full_name AS "Full Name"
+FROM teacher te
+WHERE NOT EXISTS (
         SELECT 1 
         FROM teaching t 
         WHERE t.teacher_id = te.teacher_id
